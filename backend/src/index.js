@@ -13,17 +13,19 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
+const app = express();
 const PORT = process.env.PORT;
 const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(cors({
+    origin: [
+        'https://fullstack-mern-chat-app-lrvh.onrender.com', // Your deployed frontend URL
+        'http://localhost:5173' // Your frontend development URL
+    ],
+    credentials: true // ⭐⭐⭐ This must be true for cookies ⭐⭐⭐
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
