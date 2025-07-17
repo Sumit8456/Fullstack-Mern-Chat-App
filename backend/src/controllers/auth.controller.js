@@ -33,6 +33,8 @@ export const signup = async (req, res) => {
 
             // ⭐ Capture the token returned by generateToken and use it with res.cookie directly ⭐
             const token = generateToken(newUser._id, res); // generateToken will still set the cookie
+            console.log("Controller: generateToken called. Response status before json:", res.statusCode);
+console.log("Controller: Response headers set so far:", res.getHeaders()); // Check if Set-Cookie is here
 
             res.status(201).json({
                 _id: newUser._id,
@@ -40,6 +42,7 @@ export const signup = async (req, res) => {
                 email: newUser.email,
                 profilePic: newUser.profilePic,
             });
+            console.log("Controller: Response sent.");
         } else {
             res.status(400).json({ message: "Invalid user data" });
         }
