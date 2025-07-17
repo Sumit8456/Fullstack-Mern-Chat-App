@@ -31,7 +31,14 @@ export const signup = async (req, res) => {
       // generate jwt token here
       generateToken(newUser._id, res);
       await newUser.save();
-
+      
+        // Set JWT as an httpOnly cookie
+        res.cookie("jwt", token, {
+            maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in ms
+            httpOnly: true, // Prevents XSS attacks
+            sameSite: "strict", // CSRF protection
+            secure: process.env.NODE_ENV !== "development", // Use secure in production (HTTPS)
+        });
       res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
@@ -62,7 +69,14 @@ export const login = async (req, res) => {
     }
 
     generateToken(user._id, res);
-
+    
+      // Set JWT as an httpOnly cookie
+        res.cookie("jwt", token, {
+            maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in ms
+            httpOnly: true, // Prevents XSS attacks
+            sameSite: "strict", // CSRF protection
+            secure: process.env.NODE_ENV !== "development", // Use secure in production (HTTPS)
+        });
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
